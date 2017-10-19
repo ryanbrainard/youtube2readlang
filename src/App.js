@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import './App.css';
-import WordQuiz from './WordQuiz';
 import { Grid } from 'react-bootstrap';
+import ConvertionForm from './ConvertionForm'
 
 class App extends Component {
   render() {
@@ -17,13 +17,13 @@ class App extends Component {
         </div>
 
         <Grid>
-          <WordQuiz/>
+          <ConvertionForm/>
 
           <footer>
             <hr/>
             Made in Korea.
             &nbsp;
-            <a href="https://github.com/ryanbrainard/korean-vocabulary-quiz" target="_blank" rel="noopener noreferrer">
+            <a href="https://github.com/ryanbrainard/youtube2readlang" target="_blank" rel="noopener noreferrer">
               View Source
             </a>
             <hr/>

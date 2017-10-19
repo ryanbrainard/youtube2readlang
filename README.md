@@ -1,6 +1,6 @@
-# Korean Vocabulary Quiz
+# YouTube --> Readlang
 
-Inspired by https://redd.it/72wf0s, this is a simple React app to calculate the approximate number of words a Korean learner knows.
+Automatically create synchronized Readlang video texts from YouTube videos with subtitles.
 
 ---
 
