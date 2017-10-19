@@ -1,9 +1,21 @@
 import React, { Component } from 'react';
 import './App.css';
 import { Grid } from 'react-bootstrap';
-import ConvertionForm from './ConvertionForm'
+import ConversionForm from './ConversionForm'
 
 class App extends Component {
+  componentDidMount() {
+    // TODO: load properly
+    window.addEventListener('load', function() {
+      var readlang = window.readlang
+      readlang.setup({
+        baseURL: "https://readlang.com",
+        APIKey: "a12345"
+      })
+      readlang.requestAuth()
+    });
+  }
+
   render() {
     return (
       <div>
@@ -17,7 +29,7 @@ class App extends Component {
         </div>
 
         <Grid>
-          <ConvertionForm/>
+          <ConversionForm/>
 
           <footer>
             <hr/>
