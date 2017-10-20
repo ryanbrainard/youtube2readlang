@@ -10,7 +10,7 @@ class App extends Component {
       var readlang = window.readlang
       readlang.setup({
         baseURL: "https://readlang.com",
-        APIKey: "a12345"
+        APIKey: "youtube2readlang"
       })
       readlang.requestAuth()
     });
