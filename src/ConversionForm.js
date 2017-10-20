@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import './App.css';
-import {Button, Col, FormControl, FormGroup, Jumbotron, Row} from 'react-bootstrap'
+import {Button, Col, FormControl, FormGroup, HelpBlock, Jumbotron, Row} from 'react-bootstrap'
 import {connect} from 'react-refetch'
 
 class ConversionForm extends Component {
@@ -19,6 +19,7 @@ class ConversionForm extends Component {
   }
 
   render() {
+    const { jamakPost, jamakPostResponse } = this.props
     const { youtubeUrl } = this.state
 
     return (
@@ -40,8 +41,10 @@ class ConversionForm extends Component {
                 placeholder="Enter a YouTube URL with subtitles"
                 onChange={this.handleYoutubeUrlChange.bind(this)}
               />
-              <br/>
-              <Button bsStyle="primary" onClick={() => this.props.jamakPost(youtubeUrl)}>Submit</Button>
+              <HelpBlock style={{color: 'red'}}>
+                { jamakPostResponse && jamakPostResponse.rejected && jamakPostResponse.reason.message }
+              </HelpBlock>
+              <Button bsStyle="primary" onClick={() => jamakPost(youtubeUrl)}>Submit</Button>
             </FormGroup>
           </Col>
         </Row>
@@ -52,7 +55,7 @@ class ConversionForm extends Component {
 
 export default connect(props => ({
   jamakPost: youtubeUrl => ({
-    postLikeResponse: {
+    jamakPostResponse: {
       url: 'https://jamak.herokuapp.com/',
       method: 'POST',
       body: JSON.stringify({
