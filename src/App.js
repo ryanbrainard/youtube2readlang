@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import './App.css';
 import { Grid } from 'react-bootstrap';
-import ConversionForm from './ConversionForm'
+import ConversionPage from './ConversionPage'
 
 class App extends Component {
   componentDidMount() {
@@ -29,7 +29,7 @@ class App extends Component {
         </div>
 
         <Grid>
-          <ConversionForm/>
+          <ConversionPage/>
 
           <footer>
             <hr/>
