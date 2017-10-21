@@ -2,18 +2,11 @@ import React, { Component } from 'react';
 import './App.css';
 import { Grid } from 'react-bootstrap';
 import ConversionPage from './ConversionPage'
+import readlang from './readlang'
 
 class App extends Component {
   componentDidMount() {
-    // TODO: load properly
-    window.addEventListener('load', function() {
-      var readlang = window.readlang
-      readlang.setup({
-        baseURL: "https://readlang.com",
-        APIKey: "youtube2readlang"
-      })
-      readlang.requestAuth()
-    });
+    readlang.requestAuth()
   }
 
   render() {
