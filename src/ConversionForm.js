@@ -13,7 +13,10 @@ class ConversionForm extends Component {
     super(props, context);
     this.state = {
       youtubeUrl: '',
-      language: 'ko'
+      language: '',
+      title: '',
+      channelTitle: '',
+      languages: []
     };
   }
 
@@ -24,19 +27,37 @@ class ConversionForm extends Component {
     const matches = youtubeUrl.match(YOUTUBE_REGEX)
     if (matches) {
       const videoId = matches[5]
-      // TODO: combine?
-      this.props.youtubeGetVideoInfo(videoId)
-      this.props.youtubeGetCaptionList(videoId)
-
 
       window.gapi.client.youtube.videos.list({
         id: videoId,
         part: 'snippet'
-      }).then(function(response) {
+      }).then(response => {
         console.log(response)
+        if (response.result.items.length === 1) {
+          const snippet = response.result.items[0].snippet
+          this.setState({
+            snippet: snippet, // TODO: only this?
+            title: snippet.title,
+            channelTitle: snippet.channelTitle
+          })
+        }
       });
 
+      window.gapi.client.youtube.captions.list({
+        videoId: videoId,
+        part: 'snippet'
+      }).then(response => {
+        console.log(response)
 
+        const languages = response.result.items.reduce((langs, item) => {
+          // TODO: item.snippet.language is not unique; use array
+          return Object.assign({[item.snippet.language]: item.snippet.trackKind}, langs)
+        }, {})
+
+        this.setState({
+          languages
+        })
+      });
     }
 
     this.setState({
@@ -51,33 +72,8 @@ class ConversionForm extends Component {
   }
 
   render() {
-    const { jamakPost, jamakPostResponse, youtubeGetVideoInfoResponse, youtubeGetCaptionListResponse } = this.props
-    const { youtubeUrl, language } = this.state
-    const videoFetch = PromiseState.all([
-      youtubeGetVideoInfoResponse || PromiseState.create(),  // TODO
-      youtubeGetCaptionListResponse || PromiseState.create() // TODO
-    ]).then(([info, captions]) => {
-        let title = undefined
-        let channelTitle = undefined
-        let languages = []
-
-        if (info.items.length === 1) {
-          const snippet = info.items[0].snippet
-          title = snippet.title
-          channelTitle = snippet.channelTitle
-        }
-
-        languages = captions.items.reduce((langs, item) => {
-          // TODO: item.snippet.language is not unique; use array
-          return Object.assign({[item.snippet.language]: item.snippet.trackKind}, langs)
-        }, {})
-
-        return {
-          title,
-          channelTitle,
-          languages
-        }
-      })
+    const { jamakPost, jamakPostResponse } = this.props
+    const { youtubeUrl, language, title, channelTitle, languages } = this.state
 
     return (
       <FormGroup>
@@ -88,34 +84,32 @@ class ConversionForm extends Component {
           onChange={this.handleYoutubeUrlChange.bind(this)}
         />
 
-        <PromiseStateContainer ps={videoFetch} onFulfillment={(video) =>
-          <div>
-            <FormControl.Static>
-              {video.channelTitle}: {video.title}
-            </FormControl.Static>
+        <div>
+          <FormControl.Static>
+            {channelTitle}: {title}
+          </FormControl.Static>
 
-            <FormControl
-              componentClass="select"
-              style={{width: "10em"}}
-              value={language}
-              onChange={this.handleLanguageChange.bind(this)}
-            >
-              {
-                Object.keys(video.languages).map((langCode) => {
-                  let langInfo = isoCodes[langCode]
-                  // TODO: split on '-'
-                  let label = langInfo ? langInfo.name : langCode
-                  if (video.languages[langCode] === "ASR") {
-                    label += " (auto-translated)"
-                  }
-                  return (
-                    <option key={langCode} value={langCode}>{label}</option>
-                  )
-                })
-              }
-            </FormControl>
-          </div>
-        }/>
+          <FormControl
+            componentClass="select"
+            style={{width: "10em"}}
+            value={language}
+            onChange={this.handleLanguageChange.bind(this)}
+          >
+            {
+              Object.keys(languages).map((langCode) => {
+                let langInfo = isoCodes[langCode]
+                // TODO: split on '-'
+                let label = langInfo ? langInfo.name : langCode
+                if (languages[langCode] === "ASR") {
+                  label += " (auto-translated)"
+                }
+                return (
+                  <option key={langCode} value={langCode}>{label}</option>
+                )
+              })
+            }
+          </FormControl>
+        </div>
 
         <PromiseStateContainer ps={jamakPostResponse} onFulfillment={() => {}} onRejection={(reason) =>
           <HelpBlock style={{color: 'red'}}>
@@ -150,11 +144,5 @@ export default connect(props => ({
       }
     }
   }),
-  youtubeGetVideoInfo: (videoId) => ({
-    youtubeGetVideoInfoResponse: `https://www.googleapis.com/youtube/v3/videos/?id=${videoId}&part=snippet%2CcontentDetails%2Cstatistics&key=AIzaSyDYzJX4JLJ7JHF8Ki_CW5mz9Om_fEWD7a4`
-  }),
-  youtubeGetCaptionList: (videoId) => ({
-    youtubeGetCaptionListResponse: `https://www.googleapis.com/youtube/v3/captions/?videoId=${videoId}&part=snippet&key=AIzaSyDYzJX4JLJ7JHF8Ki_CW5mz9Om_fEWD7a4`
-  })
 }))(ConversionForm);
 

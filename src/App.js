@@ -10,7 +10,10 @@ class App extends Component {
 
     // TODO: load properly
     window.addEventListener('load', function() {
-      window.gapi.auth2.getAuthInstance().signIn()
+      // TODO: apparently, this is not working..
+      if (!window.gapi.auth2.getAuthInstance().isSignedIn.get()) {
+        window.gapi.auth2.getAuthInstance().signIn()
+      }
     })
   }
 
