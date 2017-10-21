@@ -1,0 +1,13 @@
+{
+  "web": {
+    "client_id": "815308783515-tg9s4fp21ki7ernkfako2eck21m17hui.apps.googleusercontent.com",
+    "project_id": "youtube-to-readlang",
+    "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+    "token_uri": "https://accounts.google.com/o/oauth2/token",
+    "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+    "client_secret": "mcIwCqy_MTB0qXikz8l4aGFm",
+    "javascript_origins": [
+      "http://localhost:4000"
+    ]
+  }
+}

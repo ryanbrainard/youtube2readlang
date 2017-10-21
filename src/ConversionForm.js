@@ -27,6 +27,16 @@ class ConversionForm extends Component {
       // TODO: combine?
       this.props.youtubeGetVideoInfo(videoId)
       this.props.youtubeGetCaptionList(videoId)
+
+
+      window.gapi.client.youtube.videos.list({
+        id: videoId,
+        part: 'snippet'
+      }).then(function(response) {
+        console.log(response)
+      });
+
+
     }
 
     this.setState({

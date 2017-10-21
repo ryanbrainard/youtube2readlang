@@ -7,6 +7,11 @@ import readlang from './readlang'
 class App extends Component {
   componentDidMount() {
     readlang.requestAuth()
+
+    // TODO: load properly
+    window.addEventListener('load', function() {
+      window.gapi.auth2.getAuthInstance().signIn()
+    })
   }
 
   render() {
