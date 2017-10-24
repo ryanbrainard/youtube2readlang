@@ -59,7 +59,7 @@ class VideoQueryResult extends Component {
                   .filter((caption) => supportedLanguages[caption.snippet.language])
                   .map((caption) => {
                     let label = supportedLanguages[caption.snippet.language]
-                    if (caption.trackKind === "ASR") {
+                    if (caption.snippet.trackKind === "ASR") {
                       label += " (auto-translated)"
                     }
                     return (
