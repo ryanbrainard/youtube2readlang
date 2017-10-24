@@ -2,7 +2,6 @@ import React, {Component} from 'react'
 import PropTypes from 'prop-types'
 import {Button} from 'react-bootstrap'
 import {connect} from 'react-refetch'
-import youtube from './youtube'
 import PromiseStateContainer from './PromiseStateContainer'
 
 class ConversionSubmitButton extends Component {
