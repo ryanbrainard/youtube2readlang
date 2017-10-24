@@ -6,10 +6,16 @@ import youtube from './youtube'
 import PromiseStateContainer from './PromiseStateContainer'
 import {supportedLanguages} from './languages'
 import ConversionSubmitButton from './ConversionSubmitButton'
+import ErrorBox from './ErrorBox'
 
 class VideoQueryResult extends Component {
   static propTypes = {
     videoId: PropTypes.string,
+  }
+
+  constructor(props, context) {
+    super(props, context)
+    this.state = {}
   }
 
   render() {
@@ -22,7 +28,9 @@ class VideoQueryResult extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    if ((!this.state || !this.state.selectedCaptionId) && nextProps.captionsFetch.fulfilled) {
+    let noCaptionId = !this.state || !this.state.selectedCaptionId
+    const defaultAvailable = nextProps.captionsFetch.fulfilled && nextProps.captionsFetch.value.items[0]
+    if (noCaptionId && defaultAvailable) {
       this.setState({
         selectedCaptionId: nextProps.captionsFetch.value.items[0].id,
       })
@@ -43,38 +51,42 @@ class VideoQueryResult extends Component {
 
     const selectedCaption = captions.find((c) => c.id === this.state.selectedCaptionId) || captions[0]
     const selectedLanguage = selectedCaption && selectedCaption.snippet.language
+    const noCaptionsError = <ErrorBox error="This video does not have any subtitles."/>
+    const captionsForm = (
+      <Form inline>
+        <FormGroup>
+          <FormControl
+            componentClass="select"
+            value={selectedCaptionId}
+            onChange={handleCaptionChange}
+          >
+            {
+              captions
+                .filter((caption) => supportedLanguages[caption.snippet.language])
+                .map((caption) => {
+                  let label = supportedLanguages[caption.snippet.language]
+                  if (caption.snippet.trackKind === "ASR") {
+                    label += " (auto-translated)"
+                  }
+                  return (
+                    <option key={caption.id} value={caption.id}>{label}</option>
+                  )
+                })
+            }
+          </FormControl>
+          &nbsp;&nbsp;
+          <ConversionSubmitButton
+            videoId={this.props.videoId}
+            language={selectedLanguage}
+          />
+        </FormGroup>
+      </Form>
+    )
 
     return (
       <Well>
         <h4><strong>{snippet.channelTitle}:</strong> {snippet.title}</h4>
-        <Form inline>
-          <FormGroup>
-            <FormControl
-              componentClass="select"
-              value={selectedCaptionId}
-              onChange={handleCaptionChange}
-            >
-              {
-                captions
-                  .filter((caption) => supportedLanguages[caption.snippet.language])
-                  .map((caption) => {
-                    let label = supportedLanguages[caption.snippet.language]
-                    if (caption.snippet.trackKind === "ASR") {
-                      label += " (auto-translated)"
-                    }
-                    return (
-                      <option key={caption.id} value={caption.id}>{label}</option>
-                    )
-                  })
-              }
-            </FormControl>
-            &nbsp;&nbsp;
-            <ConversionSubmitButton
-              videoId={this.props.videoId}
-              language={selectedLanguage}
-            />
-          </FormGroup>
-        </Form>
+        { captions.length === 0 ? noCaptionsError : captionsForm }
       </Well>
     )
   }
