@@ -6,8 +6,9 @@ import PromiseStateContainer from './PromiseStateContainer'
 
 class ConversionSubmitButton extends Component {
   static propTypes = {
-    videoId: PropTypes.string,
-    language: PropTypes.string,
+    videoId: PropTypes.string.isRequired,
+    language: PropTypes.string.isRequired,
+    trackKind: PropTypes.string.isRequired,
   }
 
   render() {
@@ -22,7 +23,7 @@ class ConversionSubmitButton extends Component {
   }
 }
 
-export default connect(({ videoId, language }) => ({
+export default connect(({ videoId, language, trackKind }) => ({
   jamakPost: () => ({
     jamakPostResponse: {
       url: 'https://jamak.herokuapp.com/',
@@ -34,6 +35,7 @@ export default connect(({ videoId, language }) => ({
         options: {
           'readlang.access_token': localStorage.getItem('readlang.access_token'),
           'language': language,
+          'trackKind': trackKind,
           // TODO: pass in author
           // TODO: pass in title
         }

@@ -51,6 +51,7 @@ class VideoQueryResult extends Component {
 
     const selectedCaption = captions.find((c) => c.id === this.state.selectedCaptionId) || captions[0]
     const selectedLanguage = selectedCaption && selectedCaption.snippet.language
+    const selectedTrackKind = selectedCaption && selectedCaption.snippet.trackKind
     const noCaptionsError = <ErrorBox error="This video does not have any subtitles."/>
     const captionsForm = (
       <Form inline>
@@ -78,6 +79,7 @@ class VideoQueryResult extends Component {
           <ConversionSubmitButton
             videoId={this.props.videoId}
             language={selectedLanguage}
+            trackKind={selectedTrackKind}
           />
         </FormGroup>
       </Form>
