@@ -16,7 +16,7 @@ class ConversionSubmitButton extends Component {
 
     return <PromiseStateContainer
       ps={jamakPostResponse}
-      onUndefined={() => <Button bsStyle="primary" onClick={jamakPost}>Submit</Button>}
+      onUndefined={() => <Button bsStyle="primary" onClick={jamakPost}>Import</Button>}
       onPending={() => <em>Processing...</em>}
       onFulfillment={(r) => <Button bsStyle="success" href={r.output} target="_blank">View</Button>}
     />
