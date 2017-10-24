@@ -1,5 +1,4 @@
 // Copied and stripped down from https://github.com/SteveRidout/readlang-api
-// TODO: convert to a real module!
 
 var readlang = {};
 
