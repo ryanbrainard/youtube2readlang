@@ -29,14 +29,13 @@ class App extends Component {
 
           <SearchForm/>
 
+          <hr/>
           <footer>
-            <hr/>
-            Made in Korea.
-            &nbsp;
             <a href="https://github.com/ryanbrainard/youtube2readlang" target="_blank" rel="noopener noreferrer">
-              View Source
+              View Source.
             </a>
-            <hr/>
+            &nbsp;
+            <em>Not associated with YouTube or Readlang.</em>
           </footer>
         </Grid>
       </div>
