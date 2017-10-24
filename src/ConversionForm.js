@@ -11,69 +11,77 @@ class ConversionForm extends Component {
 
   constructor(props, context) {
     super(props, context);
+    // TODO: simplify. shouldn't need to set all these is rendered properly
     this.state = {
       youtubeUrl: '',
-      language: '',
-      title: '',
-      channelTitle: '',
-      languages: []
+      snippet: {},
+      captions: [],
+      caption: {},
     };
   }
 
   handleYoutubeUrlChange(e) {
     const youtubeUrl = e.target.value
 
-    // TODO: add color to form if not matched
-    const matches = youtubeUrl.match(YOUTUBE_REGEX)
-    if (matches) {
-      const videoId = matches[5]
-
-      window.gapi.client.youtube.videos.list({
-        id: videoId,
-        part: 'snippet'
-      }).then(response => {
-        console.log(response)
-        if (response.result.items.length === 1) {
-          const snippet = response.result.items[0].snippet
-          this.setState({
-            snippet: snippet, // TODO: only this?
-            title: snippet.title,
-            channelTitle: snippet.channelTitle
-          })
-        }
-      });
-
-      window.gapi.client.youtube.captions.list({
-        videoId: videoId,
-        part: 'snippet'
-      }).then(response => {
-        console.log(response)
-
-        const languages = response.result.items.reduce((langs, item) => {
-          // TODO: item.snippet.language is not unique; use array
-          return Object.assign({[item.snippet.language]: item.snippet.trackKind}, langs)
-        }, {})
-
-        this.setState({
-          languages
-        })
-      });
-    }
-
     this.setState({
       youtubeUrl
     })
+
+    // TODO: add color to form if not matched
+    const matches = youtubeUrl.match(YOUTUBE_REGEX)
+    if (!matches) {
+      return
+    }
+    const videoId = matches[5]
+
+    window.gapi.client.youtube.videos.list({
+      id: videoId,
+      part: 'snippet'
+    }).then(response => {
+      let items = response.result.items
+      if (items.length !== 1) {
+        return
+      }
+      this.setState({
+        snippet: items[0].snippet
+      })
+    });
+
+    window.gapi.client.youtube.captions.list({
+      videoId: videoId,
+      part: 'snippet'
+    }).then(response => {
+      this.setState({
+        captions: response.result.items
+      })
+    });
   }
 
-  handleLanguageChange(e) {
+  handleCaptionChange(e) {
     this.setState({
-      language: e.target.value,
+      caption: this.state.captions.find((c) => c.id === e.target.value),
     })
+  }
+
+  handleSubmit() {
+    const { jamakPost, jamakPostResponse } = this.props
+    const { youtubeUrl, snippet, captions, caption } = this.state
+
+    console.log(youtubeUrl, caption.id, caption.snippet.language)
+
+    window.gapi.client.youtube.captions.download({
+      id: caption.id,
+      tfmt: 'srt'
+    }).then(response => {
+      console.log(response)
+    });
+
+    // jamakPost(youtubeUrl, caption.snippet.language)
   }
 
   render() {
     const { jamakPost, jamakPostResponse } = this.props
-    const { youtubeUrl, language, title, channelTitle, languages } = this.state
+    const { youtubeUrl, snippet, captions, caption } = this.state
 
     return (
       <FormGroup>
@@ -86,25 +94,26 @@ class ConversionForm extends Component {
 
         <div>
           <FormControl.Static>
-            {channelTitle}: {title}
+            {snippet.channelTitle}: {snippet.title}
           </FormControl.Static>
 
           <FormControl
             componentClass="select"
-            style={{width: "10em"}}
-            value={language}
-            onChange={this.handleLanguageChange.bind(this)}
+            style={{width: "20em"}}
+            value={caption.id}
+            onChange={this.handleCaptionChange.bind(this)}
           >
             {
-              Object.keys(languages).map((langCode) => {
+              captions.map((caption) => {
+                let langCode = caption.snippet.language
+                // TODO: update isoCodes with support for dialects
                 let langInfo = isoCodes[langCode]
-                // TODO: split on '-'
                 let label = langInfo ? langInfo.name : langCode
-                if (languages[langCode] === "ASR") {
+                if (caption.trackKind === "ASR") {
                   label += " (auto-translated)"
                 }
                 return (
-                  <option key={langCode} value={langCode}>{label}</option>
+                  <option key={caption.id} value={caption.id}>{label}</option>
                 )
               })
             }
@@ -117,7 +126,7 @@ class ConversionForm extends Component {
           </HelpBlock>
         }/>
 
-        <Button bsStyle="primary" onClick={() => jamakPost(youtubeUrl, language)}>Submit</Button>
+        <Button bsStyle="primary" onClick={this.handleSubmit.bind(this)}>Submit</Button>
       </FormGroup>
     );
   }
