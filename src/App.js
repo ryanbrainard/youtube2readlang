@@ -1,20 +1,12 @@
-import React, { Component } from 'react';
+import React, {Component} from 'react';
 import './App.css';
-import { Grid } from 'react-bootstrap';
-import ConversionPage from './ConversionPage'
+import {Grid, Jumbotron} from 'react-bootstrap';
 import readlang from './readlang'
+import SearchForm from './SearchForm'
 
 class App extends Component {
   componentDidMount() {
     readlang.requestAuth()
-
-    // TODO: load properly
-    window.addEventListener('load', function() {
-      // TODO: apparently, this is not working..
-      if (!window.gapi.auth2.getAuthInstance().isSignedIn.get()) {
-        window.gapi.auth2.getAuthInstance().signIn()
-      }
-    })
   }
 
   render() {
@@ -30,7 +22,12 @@ class App extends Component {
         </div>
 
         <Grid>
-          <ConversionPage/>
+          <br/>
+          <Jumbotron>
+            <h1>YouTube -> ReadLang</h1>
+          </Jumbotron>
+
+          <SearchForm/>
 
           <footer>
             <hr/>
