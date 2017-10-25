@@ -6,7 +6,21 @@ var config;
 readlang.setup = function (_config) {
   config = _config;
 };
-	
+
+readlang.url = function(path) {
+  return config.baseURL + path
+}
+
+readlang.buildApiRequest = (method, path, others) => Object.assign({
+  method,
+  url: readlang.url(`/api${path}`),
+  headers: {
+    Authorization: `Bearer ${localStorage.getItem('readlang.access_token')}`,
+    Accept: 'application/json',
+    'Content-Type': 'application/json',
+  }
+}, others)
+
 // Authorization access token
 // --------------------------
 
@@ -27,8 +41,8 @@ readlang.requestAuth = function (force) {
     return
   }
 
-  window.location.href = config.baseURL + '/oauth?response_type=token&client_id=' + config.APIKey +
-    '&redirect_uri=' + encodeURIComponent(window.location.href) + '&scope=words';
+  window.location.href = readlang.url('/oauth?response_type=token&client_id=' + config.APIKey +
+    '&redirect_uri=' + encodeURIComponent(window.location.href) + '&scope=words')
 };
 
 // TODO: pass in config for these
