@@ -1,5 +1,6 @@
 import queryString from 'query-string'
 import xml2js from 'xml2js'
+import {supportedLanguages} from './languages'
 
 const apiKey = 'AIzaSyDYzJX4JLJ7JHF8Ki_CW5mz9Om_fEWD7a4'
 
@@ -14,7 +15,11 @@ function buildApiV3Request(method, path, params, others) {
 function getVideoTimedTextRequest(v, lang, others) {
   return Object.assign({
     method: 'GET',
-    url: `https://www.youtube.com/api/timedtext?${queryString.stringify({v, lang})}`,
+    url: `https://www.youtube.com/api/timedtext?${queryString.stringify({
+      v, 
+      lang, 
+      name: supportedLanguages[lang] // required for some reason on some videos
+    })}`,
     headers: {
       'Content-Type': undefined
     },
@@ -31,8 +36,6 @@ function handleXmlResponse(response) {
   if (response.ok) {
     return new Promise((resolve, reject) => {
       textPromise.then((text) => {
-        console.log("TEXT DUMP", text) // TODO: bug!
-
         xml2js.parseString(text, (err, result) => {
           if (err) {
             reject(err)

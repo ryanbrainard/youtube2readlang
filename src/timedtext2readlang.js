@@ -17,9 +17,10 @@ export function timedtext2readlangSync(result) {
   let wordCount = 0
 
   result.transcript.text.forEach((t) => {
-    book.plainText += t._ + "\n\n"
+    const line = (t._ || '').trim()
+    book.plainText += line + "\n\n"
     book.audioMap.push({t: parseFloat(t.$.start), w: wordCount})
-    wordCount += t._.split(" ").length
+    wordCount += line.split(" ").length
   })
 
   return book
