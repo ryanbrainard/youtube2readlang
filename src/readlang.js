@@ -18,6 +18,18 @@ readlang.buildApiRequest = (method, path, others) => Object.assign({
     Authorization: `Bearer ${localStorage.getItem('readlang.access_token')}`,
     Accept: 'application/json',
     'Content-Type': 'application/json',
+  },
+  handleResponse: function(response) { // TODO: this shouldn't be needed, but react-refetch isn't reseting to default after XML override
+    if (response.headers.get('content-length') === '0' || response.status === 204) {
+      return
+    }
+
+    const json = response.json()
+    if (response.ok) {
+      return json
+    } else {
+      return json.then(cause => Promise.reject(cause))
+    }
   }
 }, others)
 

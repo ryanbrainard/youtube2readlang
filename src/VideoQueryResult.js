@@ -51,8 +51,9 @@ class VideoQueryResult extends Component {
 
     const selectedCaption = captions.find((c) => c.id === this.state.selectedCaptionId) || captions[0]
     const selectedLanguage = selectedCaption && selectedCaption.snippet.language
-    const selectedTrackKind = selectedCaption && selectedCaption.snippet.trackKind
     const noCaptionsError = <ErrorBox error="This video does not have any subtitles."/>
+    const supportedCaptions = captions.filter((caption) => caption.snippet.trackKind !== "ASR")
+                                      .filter((caption) => supportedLanguages[caption.snippet.language])
     const captionsForm = (
       <Form inline>
         <FormGroup>
@@ -62,24 +63,21 @@ class VideoQueryResult extends Component {
             onChange={handleCaptionChange}
           >
             {
-              captions
-                .filter((caption) => supportedLanguages[caption.snippet.language])
-                .map((caption) => {
-                  let label = supportedLanguages[caption.snippet.language]
-                  if (caption.snippet.trackKind === "ASR") {
-                    label += " (auto-translated)"
-                  }
-                  return (
-                    <option key={caption.id} value={caption.id}>{label}</option>
-                  )
-                })
+              supportedCaptions.map((caption) => {
+                return (
+                  <option key={caption.id} value={caption.id}>
+                    {supportedLanguages[caption.snippet.language]}
+                  </option>
+                )
+              })
             }
           </FormControl>
           &nbsp;&nbsp;
           <ConversionSubmitButton
             videoId={this.props.videoId}
+            title={snippet.title}
+            author={snippet.channelTitle}
             language={selectedLanguage}
-            trackKind={selectedTrackKind}
           />
         </FormGroup>
       </Form>
@@ -88,13 +86,13 @@ class VideoQueryResult extends Component {
     return (
       <Well>
         <h4><strong>{snippet.channelTitle}:</strong> {snippet.title}</h4>
-        { captions.length === 0 ? noCaptionsError : captionsForm }
+        { supportedCaptions.length === 0 ? noCaptionsError : captionsForm }
       </Well>
     )
   }
 }
 
 export default connect(({ videoId }) => ({
-  videosFetch: youtube.buildApiRequest('GET', '/videos', {id: videoId, part: 'snippet'}),
-  captionsFetch: youtube.buildApiRequest('GET', '/captions', {videoId: videoId, part: 'snippet'}),
+  videosFetch: youtube.buildApiV3Request('GET', '/videos', {id: videoId, part: 'snippet'}),
+  captionsFetch: youtube.buildApiV3Request('GET', '/captions', {videoId: videoId, part: 'snippet'}),
 }))(VideoQueryResult)

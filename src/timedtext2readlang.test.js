@@ -1,4 +1,4 @@
-import timedtext2readlang from './timedtext2readlang'
+import { timedtext2readlangAsync } from './timedtext2readlang'
 
 const sampleXml = `<transcript>
   <text start="2.71" dur="1.7">예전에 영화에서 봤는데</text>
@@ -22,7 +22,7 @@ const sampleBook = {
 }
 
 it('converts timedTextXML to audioMap', (done) => {
-  timedtext2readlang(sampleXml, (response) => {
+  timedtext2readlangAsync(sampleXml, (response) => {
     expect(response).toEqual(sampleBook)
     done()
   })

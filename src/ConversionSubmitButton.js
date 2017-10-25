@@ -3,61 +3,59 @@ import PropTypes from 'prop-types'
 import {Button} from 'react-bootstrap'
 import {connect} from 'react-refetch'
 import PromiseStateContainer from './PromiseStateContainer'
+import youtube from './youtube'
 import readlang from './readlang'
+import {timedtext2readlangSync} from './timedtext2readlang'
 
 class ConversionSubmitButton extends Component {
   static propTypes = {
     videoId: PropTypes.string.isRequired,
+    title: PropTypes.string.isRequired,
+    author: PropTypes.string.isRequired,
     language: PropTypes.string.isRequired,
-    trackKind: PropTypes.string.isRequired,
   }
 
   render() {
-    const { jamakPost, readlangPatchBookResponse } = this.props
+    const { importVideo, readlangBookResponse } = this.props
 
     return <PromiseStateContainer
-      ps={readlangPatchBookResponse}
+      ps={readlangBookResponse}
       onUndefined={() =>
-        <Button bsStyle="primary" onClick={jamakPost}>Import</Button>
+        <Button bsStyle="primary" onClick={importVideo}>Import</Button>
       }
       onPending={() =>
         <em>Processing...</em>
       }
-      onFulfillment={(r) =>
-        <Button bsStyle="success" href={readlang.url(`/library/${r.bookID}`)} target="_blank">View</Button>
+      onFulfillment={(b) =>
+        <Button bsStyle="success" href={readlang.url(`/library/${b.bookID}`)} target="_blank">View</Button>
       }
     />
   }
 }
 
-export default connect(({ videoId, language, trackKind }) => ({
-  jamakPost: () => ({
-    readlangPatchBookResponse: {
-      url: 'https://jamak.herokuapp.com/',
-      method: 'POST',
-      body: JSON.stringify({
-        input: `https://youtu.be/${videoId}`,
-        parser: 'youtube',
-        formatter: 'readlang',
-        options: {
-          'language': language,
-          'trackKind': trackKind,
-        }
-      }),
-      then: (jamakPostResponse) =>
-        readlang.buildApiRequest('POST', '/book', {
-          body: JSON.stringify({
-            title: "youtube2readlang temp title",
-            body: "youtube2readlang temp body",
-            language: language,
-            public: false,
-            source: "youtube2readlang",
+export default connect(({ videoId, title, author, language }) => ({
+  importVideo: () => ({
+    readlangBookResponse: youtube.getVideoTimedTextRequest(videoId, language, {
+      then: (youtubeTimedText) => ({
+        value: timedtext2readlangSync(youtubeTimedText),
+        then: (bookPatch) =>
+          readlang.buildApiRequest('POST', '/book', {
+            body: JSON.stringify({
+              title,
+              author,
+              body: "youtube2readlang temp text. if you see this, there was an error importing this video.",
+              language,
+              public: false,
+              source: "youtube2readlang",
+            }),
+            then: (readlangPostBookResponse) =>
+              readlang.buildApiRequest('PATCH', `/book/${readlangPostBookResponse.bookID}`, {
+                body: JSON.stringify(Object.assign(bookPatch, {
+                  youTubeID: videoId,
+                }))
+              })
           }),
-          then: (readlangPostBookResponse) =>
-            readlang.buildApiRequest('PATCH', `/book/${readlangPostBookResponse.bookID}`, {
-              body: jamakPostResponse.output
-            })
-        })
-    }
+      })
+    })
   }),
 }))(ConversionSubmitButton);
