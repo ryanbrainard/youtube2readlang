@@ -39,6 +39,7 @@ class VideoQueryResult extends Component {
   }
 
   renderFulfilled(video, captions) {
+    const videoId = (typeof video.id === 'object' && video.id.videoId) || video.id
     const snippet = video.snippet
     const { selectedCaptionId } = this.state
     const handleCaptionChange = (e) => {
@@ -70,9 +71,8 @@ class VideoQueryResult extends Component {
               })
             }
           </FormControl>
-          &nbsp;&nbsp;
           <ConversionSubmitButton
-            videoId={video.id}
+            videoId={videoId}
             title={snippet.title}
             author={snippet.channelTitle}
             language={selectedLanguage}
@@ -85,12 +85,14 @@ class VideoQueryResult extends Component {
       <Well>
         <Media>
           <Media.Left align="top">
-            <img src={thumbnail.url} width={thumbnail.width} height={thumbnail.height} alt={snippet.title}/>
+            <a href={`https://www.youtube.com/watch?v=${videoId}`} target={'_blank'}>
+              <img src={thumbnail.url} width={thumbnail.width} height={thumbnail.height} alt={snippet.title}/>
+            </a>
           </Media.Left>
           <Media.Body>
             <Media.Heading>{snippet.channelTitle}: {snippet.title}</Media.Heading>
-            {snippet.description}
-            <p/>
+            <p>{snippet.description}</p>
+
             { supportedCaptions.length === 0 ? noCaptionsError : captionsForm }
           </Media.Body>
         </Media>
@@ -101,7 +103,7 @@ class VideoQueryResult extends Component {
 
 export default connect(({ video }) => ({
   captionsFetch: youtube.buildApiV3Request('GET', '/captions', {
-    videoId: typeof video.id === 'object' && video.id.videoId || video.id,
+    videoId: (typeof video.id === 'object' && video.id.videoId) || video.id,
     part: 'snippet'
   }),
 }))(VideoQueryResult)

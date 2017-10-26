@@ -26,7 +26,7 @@ class SearchForm extends Component {
         <FormControl
           type="text"
           value={videoQuery}
-          placeholder="Enter a YouTube URL with subtitles"
+          placeholder="Search or enter a YouTube URL"
           onChange={this.handleVideoQueryChange.bind(this)}
         />
         <br/>

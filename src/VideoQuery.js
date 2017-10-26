@@ -16,7 +16,7 @@ class VideoQuery extends Component {
       onPending={() => null}
       onFulfillment={(videos) =>
         videos.items.map((video) =>
-          <VideoQueryResult key={video.id} video={video} />
+          <VideoQueryResult key={video.etag} video={video} />
         )
       }/>
   }

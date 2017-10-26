@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import './App.css';
 import {Col, Jumbotron, Row} from 'react-bootstrap'
 import SearchForm from './SearchForm'
+import logoImage from './logo-64.png'
 
 class ConversionPage extends Component {
   render() {
@@ -11,9 +12,10 @@ class ConversionPage extends Component {
           <Col xs={11} md={10}>
             &nbsp;
             <Jumbotron>
-              <h1>YouTube -> Readlang</h1>
+              <img src={logoImage} alt={"logo"}/>
+              <h2>YouTube ➜ Readlang</h2>
               <p>
-                Insert a YouTube URL below. Make sure the video has subtitles.
+                Search for a video and import into Readlang with synchronized subtitles.
               </p>
             </Jumbotron>
             <SearchForm/>

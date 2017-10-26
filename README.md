@@ -1,4 +1,4 @@
-# YouTube -> Readlang
+# YouTube ➜ Readlang
 
 Automatically create synchronized Readlang video texts from YouTube videos with subtitles.
 
