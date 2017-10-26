@@ -54,11 +54,12 @@ class VideoQueryResult extends Component {
     const supportedCaptions = captions.filter((caption) => caption.snippet.trackKind !== "ASR")
                                       .filter((caption) => supportedLanguages[caption.snippet.language])
     const captionsForm = (
-      <Form inline>
+      <Form>
         <FormGroup>
           <FormControl
             componentClass="select"
             value={selectedCaptionId}
+            style={{width: '10em'}}
             onChange={handleCaptionChange}
           >
             {
@@ -71,6 +72,7 @@ class VideoQueryResult extends Component {
               })
             }
           </FormControl>
+          <p/>
           <ConversionSubmitButton
             videoId={videoId}
             title={snippet.title}
