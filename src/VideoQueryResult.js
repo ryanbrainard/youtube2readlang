@@ -59,7 +59,7 @@ class VideoQueryResult extends Component {
           <FormControl
             componentClass="select"
             value={selectedCaptionId}
-            style={{width: '10em'}}
+            style={{width: `${thumbnail.width}px`}}
             onChange={handleCaptionChange}
           >
             {
@@ -90,12 +90,12 @@ class VideoQueryResult extends Component {
             <a href={`https://www.youtube.com/watch?v=${videoId}`} target={'_blank'}>
               <img src={thumbnail.url} width={thumbnail.width} height={thumbnail.height} alt={snippet.title}/>
             </a>
+            <p/>
+            { supportedCaptions.length === 0 ? noCaptionsError : captionsForm }
           </Media.Left>
           <Media.Body>
             <Media.Heading>{snippet.channelTitle}: {snippet.title}</Media.Heading>
             <p>{snippet.description}</p>
-
-            { supportedCaptions.length === 0 ? noCaptionsError : captionsForm }
           </Media.Body>
         </Media>
       </Well>
