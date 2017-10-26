@@ -1,6 +1,6 @@
 import React, {Component} from 'react'
 import PropTypes from 'prop-types'
-import {Form, FormControl, FormGroup, Well} from 'react-bootstrap'
+import {Form, FormControl, FormGroup, Media, Well} from 'react-bootstrap'
 import {connect, PromiseState} from 'react-refetch'
 import youtube from './youtube'
 import PromiseStateContainer from './PromiseStateContainer'
@@ -85,8 +85,16 @@ class VideoQueryResult extends Component {
 
     return (
       <Well>
-        <h4><strong>{snippet.channelTitle}:</strong> {snippet.title}</h4>
-        { supportedCaptions.length === 0 ? noCaptionsError : captionsForm }
+        <Media>
+          <Media.Left align="top">
+            <img src={snippet.thumbnails.default.url} width={snippet.thumbnails.default.width} height={snippet.thumbnails.default.height}/>
+          </Media.Left>
+          <Media.Body>
+            <Media.Heading>{snippet.channelTitle}: {snippet.title}</Media.Heading>
+            <p>{snippet.description}</p>
+            <p>{ supportedCaptions.length === 0 ? noCaptionsError : captionsForm }</p>
+          </Media.Body>
+        </Media>
       </Well>
     )
   }
