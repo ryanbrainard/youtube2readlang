@@ -60,7 +60,7 @@ readlang.requestAuth = function (force) {
 // TODO: pass in config for these
 readlang.setup({
   baseURL: "https://readlang.com",
-  APIKey: "youtube2readlang"
+  APIKey: process.env.REACT_APP_READLANG_API_KEY
 })
 
 export default readlang;

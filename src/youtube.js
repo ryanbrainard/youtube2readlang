@@ -2,7 +2,7 @@ import queryString from 'query-string'
 import xml2js from 'xml2js'
 import {supportedLanguages} from './languages'
 
-const apiKey = 'AIzaSyDYzJX4JLJ7JHF8Ki_CW5mz9Om_fEWD7a4'
+const apiKey = process.env.REACT_APP_YOUTUBE_API_KEY
 
 function buildApiV3Request(method, path, params, others) {
   params.key = apiKey
