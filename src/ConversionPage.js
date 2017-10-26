@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import './App.css';
 import {Col, Jumbotron, Row} from 'react-bootstrap'
-import ConversionForm from './ConversionForm'
+import SearchForm from './SearchForm'
 
 class ConversionPage extends Component {
   render() {
@@ -16,7 +16,7 @@ class ConversionPage extends Component {
                 Insert a YouTube URL below. Make sure the video has subtitles.
               </p>
             </Jumbotron>
-            <ConversionForm/>
+            <SearchForm/>
           </Col>
         </Row>
       </div>

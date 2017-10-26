@@ -1,8 +1,8 @@
 import React, {Component} from 'react';
 import './App.css';
-import {Grid, Jumbotron} from 'react-bootstrap';
+import {Grid} from 'react-bootstrap';
 import readlang from './readlang'
-import SearchForm from './SearchForm'
+import ConversionPage from './ConversionPage'
 
 class App extends Component {
   componentDidMount() {
@@ -23,11 +23,8 @@ class App extends Component {
 
         <Grid>
           <br/>
-          <Jumbotron>
-            <h1>YouTube -> ReadLang</h1>
-          </Jumbotron>
 
-          <SearchForm/>
+          <ConversionPage/>
 
           <hr/>
           <footer>

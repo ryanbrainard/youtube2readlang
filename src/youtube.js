@@ -13,12 +13,18 @@ function buildApiV3Request(method, path, params, others) {
 }
 
 function getVideoTimedTextRequest(v, lang, others) {
+  return _getVideoTimedTextRequest(v, lang, '', Object.assign(others, {
+    catch: () => _getVideoTimedTextRequest(v, lang, supportedLanguages[lang], others)
+  }))
+}
+
+function _getVideoTimedTextRequest(v, lang, name, others) {
   return Object.assign({
     method: 'GET',
     url: `https://www.youtube.com/api/timedtext?${queryString.stringify({
       v, 
       lang, 
-      name: supportedLanguages[lang] // required for some reason on some videos
+      name // required for some reason on some videos, so do crazy `catch` above
     })}`,
     headers: {
       'Content-Type': undefined
@@ -39,6 +45,8 @@ function handleXmlResponse(response) {
         xml2js.parseString(text, (err, result) => {
           if (err) {
             reject(err)
+          } else if (!result) {
+            reject('null xml result')
           } else {
             resolve(result)
           }

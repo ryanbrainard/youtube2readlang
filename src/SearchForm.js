@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import './App.css';
 import {FormControl, FormGroup} from 'react-bootstrap'
-import VideoUrlQuery from './VideoUrlQuery'
+import VideoQuery from './VideoQuery'
 
 class SearchForm extends Component {
 
@@ -30,7 +30,7 @@ class SearchForm extends Component {
           onChange={this.handleVideoQueryChange.bind(this)}
         />
         <br/>
-        <VideoUrlQuery videoUrl={this.state.videoQuery}/>
+        <VideoQuery videoQuery={this.state.videoQuery}/>
       </FormGroup>
     );
   }
