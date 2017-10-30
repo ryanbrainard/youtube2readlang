@@ -38,7 +38,7 @@ export default connect(({ videoId, title, author, language }) => ({
     readlangBookResponse: youtube.getVideoTimedTextRequest(videoId, language, {
       then: (youtubeTimedText) => ({
         value: timedtext2readlangSync(youtubeTimedText),
-        _then: (bookPatch) =>
+        then: (bookPatch) =>
           readlang.buildApiRequest('POST', '/book', {
             body: JSON.stringify({
               title,
