@@ -30,12 +30,18 @@ class VideoQueryResult extends Component {
 
   componentWillReceiveProps(nextProps) {
     let noCaptionId = !this.state || !this.state.selectedCaptionId
-    const defaultAvailable = nextProps.captionsFetch.fulfilled && nextProps.captionsFetch.value.items[0]
+    const defaultAvailable = nextProps.captionsFetch.fulfilled && this.filterSupportedCaptions(nextProps.captionsFetch.value.items)[0]
     if (noCaptionId && defaultAvailable) {
-      this.setState({
-        selectedCaptionId: nextProps.captionsFetch.value.items[0].id,
+        this.setState({
+        selectedCaptionId: this.filterSupportedCaptions(nextProps.captionsFetch.value.items)[0].id,
       })
     }
+  }
+
+  filterSupportedCaptions(captions) {
+    return captions
+      .filter((caption) => caption.snippet.trackKind !== "ASR")
+      .filter((caption) => supportedLanguages[caption.snippet.language])
   }
 
   renderFulfilled(video, captions) {
@@ -51,8 +57,7 @@ class VideoQueryResult extends Component {
     const selectedCaption = captions.find((c) => c.id === this.state.selectedCaptionId) || captions[0]
     const selectedLanguage = selectedCaption && selectedCaption.snippet.language
     const noCaptionsError = <ErrorBox error="This video does not have any subtitles."/>
-    const supportedCaptions = captions.filter((caption) => caption.snippet.trackKind !== "ASR")
-                                      .filter((caption) => supportedLanguages[caption.snippet.language])
+    const supportedCaptions = this.filterSupportedCaptions(captions)
     const captionsForm = (
       <Form>
         <FormGroup>

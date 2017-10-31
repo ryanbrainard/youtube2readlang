@@ -9,13 +9,30 @@ class SearchForm extends Component {
     super(props, context);
     this.state = {
       videoQuery: '',
+      videoQueryDelayed: '',
     };
   }
 
+  delay() {
+    let timer = 0;
+    return (callback, ms) => {
+      clearTimeout (timer)
+      timer = setTimeout(callback, ms)
+    }
+  }
+
   handleVideoQueryChange(e) {
+    const videoQuery = e.target.value
+
     this.setState({
-      videoQuery: e.target.value
+      videoQuery
     })
+
+    this.delay()(() => {
+      this.setState({
+        videoQueryDelayed: videoQuery
+      })
+    }, 500);
   }
 
   render() {
@@ -30,7 +47,7 @@ class SearchForm extends Component {
           onChange={this.handleVideoQueryChange.bind(this)}
         />
         <br/>
-        <VideoQuery videoQuery={this.state.videoQuery}/>
+        <VideoQuery videoQuery={this.state.videoQueryDelayed}/>
       </FormGroup>
     );
   }

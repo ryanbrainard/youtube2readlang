@@ -35,12 +35,13 @@ export default connect(({ videoQuery }) => {
         part: 'snippet'
       })
     }
-  } else if (videoQuery.length > 2) {
+  } else if (videoQuery.length > 0) {
     return {
       videosFetch: youtube.buildApiV3Request('GET', '/search', {
         type: 'video',
         part: 'snippet',
         videoCaption: 'closedCaption',
+        maxResults: 20,
         q: videoQuery,
       })
     }
