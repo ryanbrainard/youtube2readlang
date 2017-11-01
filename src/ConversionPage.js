@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import './App.css';
 import {Col, Jumbotron, Row} from 'react-bootstrap'
-import SearchForm from './SearchForm'
+import VideoSearchForm from './VideoSearchForm'
 import logoImage from './logo-64.png'
 
 class ConversionPage extends Component {
@@ -18,7 +18,7 @@ class ConversionPage extends Component {
                 Search for a video and import into Readlang with synchronized subtitles.
               </p>
             </Jumbotron>
-            <SearchForm/>
+            <VideoSearchForm/>
           </Col>
         </Row>
       </div>

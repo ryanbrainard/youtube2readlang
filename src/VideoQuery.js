@@ -8,6 +8,7 @@ import PromiseStateContainer from './PromiseStateContainer'
 class VideoQuery extends Component {
   static propTypes = {
     videoQuery: PropTypes.string.isRequired,
+    preferedLanguage: PropTypes.string,
   }
 
   render() {
@@ -16,7 +17,7 @@ class VideoQuery extends Component {
       onPending={() => null}
       onFulfillment={(videos) =>
         videos.items.map((video) =>
-          <VideoQueryResult key={video.etag} video={video} />
+          <VideoQueryResult key={video.etag} video={video} preferedLanguage={this.props.preferedLanguage} />
         )
       }/>
   }
