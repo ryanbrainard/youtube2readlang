@@ -14,7 +14,6 @@ class VideoQuery extends Component {
   render() {
     return <PromiseStateContainer
       ps={this.props.videosFetch}
-      onPending={() => null}
       onFulfillment={(videos) =>
         videos.items.map((video) =>
           <VideoQueryResult key={video.etag} video={video} preferedLanguage={this.props.preferedLanguage} />

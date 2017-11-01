@@ -49,26 +49,26 @@ class VideoSearchForm extends Component {
       <div>
         <FormGroup>
           <InputGroup>
-            <FormControl
-              type="text"
-              value={videoQuery}
-              placeholder="Search or enter a YouTube URL"
-              onChange={this.handleVideoQueryChange.bind(this)}
-            />
             <DropdownButton
               id="preferedLanguage"
               componentClass={InputGroup.Button}
-              title={supportedLanguages[this.state.preferedLanguage] || "Prefered Language"}
+              title={supportedLanguages[this.state.preferedLanguage] || "Any Language"}
               onSelect={this.handlePreferedLanguageChange.bind(this)}
 
             >
-              <MenuItem key='any' eventKey={undefined}>Any</MenuItem>
+              <MenuItem key='any' eventKey={undefined}>Any Language</MenuItem>
               {
                 Object.keys(supportedLanguages).map((lang) =>
                   <MenuItem key={lang} eventKey={lang}>{supportedLanguages[lang]}</MenuItem>
                 )
               }
             </DropdownButton>
+            <FormControl
+              type="text"
+              value={videoQuery}
+              placeholder="Search or enter a YouTube URL"
+              onChange={this.handleVideoQueryChange.bind(this)}
+            />
           </InputGroup>
         </FormGroup>
         <br/>

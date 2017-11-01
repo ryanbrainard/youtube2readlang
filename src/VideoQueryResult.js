@@ -31,17 +31,25 @@ class VideoQueryResult extends Component {
 
   componentWillReceiveProps(nextProps) {
     const preferedLanguage = nextProps.preferedLanguage
-    const defaultCaption = nextProps.captionsFetch.fulfilled && (
-      this.filterSupportedCaptions(nextProps.captionsFetch.value.items).find((c) =>
-        preferedLanguage && c.snippet.language === preferedLanguage) ||
-      this.filterSupportedCaptions(nextProps.captionsFetch.value.items)[0]
-    )
 
-    if (defaultCaption) {
-      this.setState({
-        selectedCaptionId: defaultCaption.id,
-      })
+    if (!nextProps.captionsFetch.fulfilled) {
+      return
     }
+
+    const captions = nextProps.captionsFetch.value.items
+    const supportedCaptions = this.filterSupportedCaptions(captions)
+    let selectedCaptionId
+
+    if (preferedLanguage) {
+      const preferedCaption = supportedCaptions.find((c) => c.snippet.language === preferedLanguage)
+      selectedCaptionId = preferedCaption && preferedCaption.id
+    } else {
+      selectedCaptionId = supportedCaptions[0] && supportedCaptions[0].id
+    }
+
+    this.setState({
+      selectedCaptionId
+    })
   }
 
   filterSupportedCaptions(captions) {
@@ -51,6 +59,10 @@ class VideoQueryResult extends Component {
   }
 
   renderFulfilled(video, captions) {
+    if (this.props.preferedLanguage && !this.state.selectedCaptionId) {
+      return null
+    }
+
     const videoId = (typeof video.id === 'object' && video.id.videoId) || video.id
     const snippet = video.snippet
     const { selectedCaptionId } = this.state
