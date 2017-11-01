@@ -20,7 +20,7 @@ export function timedtext2readlangSync(result) {
     const line = decode((t._ || '').trim())
     book.plainText += line + "\n\n"
     book.audioMap.push({t: parseFloat(t.$.start), w: wordCount})
-    const words = line.split(/[\s."]+/).filter(s => s.length > 0) // TODO: match with Readlang calculation
+    const words = line.split(/[\d\s."]+/).filter(s => s.length > 0) // TODO: match with Readlang calculation
     wordCount += words.length
     console.log({line, words, wordCount})
   })
