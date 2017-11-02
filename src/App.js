@@ -1,14 +1,9 @@
 import React, {Component} from 'react';
 import './App.css';
 import {Grid} from 'react-bootstrap';
-import readlang from './readlang'
 import ConversionPage from './ConversionPage'
 
 class App extends Component {
-  componentDidMount() {
-    readlang.requestAuth()
-  }
-
   render() {
     return (
       <div>
@@ -23,17 +18,7 @@ class App extends Component {
 
         <Grid>
           <br/>
-
           <ConversionPage/>
-
-          <hr/>
-          <footer>
-            <a href="https://github.com/ryanbrainard/youtube2readlang" target="_blank" rel="noopener noreferrer">
-              View Source.
-            </a>
-            &nbsp;
-            <em>Not associated with YouTube or Readlang.</em>
-          </footer>
         </Grid>
       </div>
     );

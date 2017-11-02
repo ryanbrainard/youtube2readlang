@@ -1,5 +1,7 @@
 // Copied and stripped down from https://github.com/SteveRidout/readlang-api
 
+const tokenKey = 'readlang.access_token'
+
 var readlang = {};
 
 var config;
@@ -15,7 +17,7 @@ readlang.buildApiRequest = (method, path, others) => Object.assign({
   method,
   url: readlang.url(`/api${path}`),
   headers: {
-    Authorization: `Bearer ${localStorage.getItem('readlang.access_token')}`,
+    Authorization: `Bearer ${localStorage.getItem(tokenKey)}`,
     Accept: 'application/json',
     'Content-Type': 'application/json',
   },
@@ -36,25 +38,33 @@ readlang.buildApiRequest = (method, path, others) => Object.assign({
 // Authorization access token
 // --------------------------
 
-var accessToken = localStorage.getItem('readlang.access_token');
+var accessToken = localStorage.getItem(tokenKey);
 
 // Read the access token if present in the window hash,
 // and write it to localStorage so it's not quite so visible
 var tokenMatch = /token=(.*)/.exec(window.location.hash);
 if (tokenMatch) {
   accessToken = decodeURIComponent(tokenMatch[1]);
-  localStorage.setItem('readlang.access_token', accessToken);
+  localStorage.setItem(tokenKey, accessToken);
   window.location.hash = "";
 }
 
+readlang.isLoggedIn = function () {
+  return !!localStorage.getItem(tokenKey);
+};
+
 // Redirects to auth page without warning
-readlang.requestAuth = function (force) {
+readlang.login = function (force) {
   if (accessToken && !force) {
     return
   }
 
   window.location.href = readlang.url('/oauth?response_type=token&client_id=' + config.APIKey +
     '&redirect_uri=' + encodeURIComponent(window.location.href) + '&scope=words')
+};
+
+readlang.logout = function () {
+  localStorage.removeItem(tokenKey);
 };
 
 // TODO: pass in config for these

@@ -3,6 +3,7 @@ import './App.css';
 import {Col, Jumbotron, Row} from 'react-bootstrap'
 import VideoSearchForm from './VideoSearchForm'
 import logoImage from './logo-64.png'
+import ReadlangSessionContainer from './ReadlangSessionContainer'
 
 class ConversionPage extends Component {
   render() {
@@ -18,7 +19,10 @@ class ConversionPage extends Component {
                 Search for a video and import into Readlang with synchronized subtitles.
               </p>
             </Jumbotron>
-            <VideoSearchForm/>
+
+            <ReadlangSessionContainer>
+              <VideoSearchForm/>
+            </ReadlangSessionContainer>
           </Col>
         </Row>
       </div>
