@@ -1,12 +1,12 @@
 import { timedtext2readlangAsync } from './timedtext2readlang'
 
 const sampleXml = `<transcript>
-  <text start="2.71" dur="1.7">예전에 영화에서  봤는데 ... </text>
+  <text start="2.71" dur="1.7">예전에 &quot;영화에서  봤는데 ... </text>
   <text start="6.923" dur="1.53">이렇게 앉아있으니까</text>
 </transcript>`
 
 const sampleBook = {
-  "plainText": "예전에 영화에서  봤는데 ...\n\n이렇게 앉아있으니까\n\n",
+  "plainText": "예전에 \"영화에서  봤는데 ...\n\n이렇게 앉아있으니까\n\n",
   "htmlMarkup": false,
   "generatedVersion": 0,
   "audioMap": [
