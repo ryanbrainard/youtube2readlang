@@ -10,7 +10,7 @@
     "react-bootstrap": "^0.31.3",
     "react-dom": "^16.0.0",
     "react-refetch": "^1.0.3-0",
-    "react-scripts": "1.0.14",
+    "react-scripts": "1.0.17",
     "tsv": "^0.2.0",
     "whatwg-fetch": "^2.0.3",
     "xml2js": "^0.4.19"
