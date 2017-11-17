@@ -1,6 +1,6 @@
-import React, {Component} from 'react'
+import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import {connect} from 'react-refetch'
+import { connect } from 'react-refetch'
 import youtube from './youtube'
 import VideoQueryResult from './VideoQueryResult'
 import PromiseStateContainer from './PromiseStateContainer'
@@ -12,13 +12,20 @@ class VideoQuery extends Component {
   }
 
   render() {
-    return <PromiseStateContainer
-      ps={this.props.videosFetch}
-      onFulfillment={(videos) =>
-        videos.items.map((video) =>
-          <VideoQueryResult key={video.etag} video={video} preferedLanguage={this.props.preferedLanguage} />
-        )
-      }/>
+    return (
+      <PromiseStateContainer
+        ps={this.props.videosFetch}
+        onFulfillment={videos =>
+          videos.items.map(video => (
+            <VideoQueryResult
+              key={video.etag}
+              video={video}
+              preferedLanguage={this.props.preferedLanguage}
+            />
+          ))
+        }
+      />
+    )
   }
 }
 
@@ -32,8 +39,8 @@ export default connect(({ videoQuery }) => {
     return {
       videosFetch: youtube.buildApiV3Request('GET', '/videos', {
         id: videoId,
-        part: 'snippet'
-      })
+        part: 'snippet',
+      }),
     }
   } else if (videoQuery.length > 0) {
     return {
@@ -43,7 +50,7 @@ export default connect(({ videoQuery }) => {
         videoCaption: 'closedCaption',
         maxResults: 20,
         q: videoQuery,
-      })
+      }),
     }
   } else {
     return {}

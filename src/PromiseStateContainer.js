@@ -1,6 +1,6 @@
-import React, {Component} from 'react'
+import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import {PromiseState} from 'react-refetch'
+import { PromiseState } from 'react-refetch'
 import LoadingAnimation from './LoadingAnimation'
 import ErrorBox from './ErrorBox'
 
@@ -15,12 +15,18 @@ class PromiseStateContainer extends Component {
 
   static defaultProps = {
     onUndefined: () => null,
-    onPending: () => <LoadingAnimation/>,
-    onRejection: (reason) => <ErrorBox error={reason}/>,
+    onPending: () => <LoadingAnimation />,
+    onRejection: reason => <ErrorBox error={reason} />,
   }
 
   render() {
-    const { ps, onUndefined, onPending, onRejection, onFulfillment } = this.props
+    const {
+      ps,
+      onUndefined,
+      onPending,
+      onRejection,
+      onFulfillment,
+    } = this.props
 
     if (!ps) {
       return onUndefined()

@@ -1,23 +1,28 @@
-import React, {Component} from 'react';
-import './App.css';
-import {DropdownButton, FormControl, FormGroup, InputGroup, MenuItem} from 'react-bootstrap'
+import React, { Component } from 'react'
+import './App.css'
+import {
+  DropdownButton,
+  FormControl,
+  FormGroup,
+  InputGroup,
+  MenuItem,
+} from 'react-bootstrap'
 import VideoQuery from './VideoQuery'
 import { supportedLanguages } from './languages'
 
 class VideoSearchForm extends Component {
-
   constructor(props, context) {
-    super(props, context);
+    super(props, context)
     this.state = {
       videoQuery: '',
       videoQueryDelayed: '',
-    };
+    }
   }
 
   delay() {
-    let timer = 0;
+    let timer = 0
     return (callback, ms) => {
-      clearTimeout (timer)
+      clearTimeout(timer)
       timer = setTimeout(callback, ms)
     }
   }
@@ -26,19 +31,19 @@ class VideoSearchForm extends Component {
     const videoQuery = e.target.value
 
     this.setState({
-      videoQuery
+      videoQuery,
     })
 
     this.delay()(() => {
       this.setState({
-        videoQueryDelayed: videoQuery
+        videoQueryDelayed: videoQuery,
       })
-    }, 500);
+    }, 500)
   }
 
   handlePreferedLanguageChange(lang) {
     this.setState({
-      preferedLanguage: lang
+      preferedLanguage: lang,
     })
   }
 
@@ -52,16 +57,20 @@ class VideoSearchForm extends Component {
             <DropdownButton
               id="preferedLanguage"
               componentClass={InputGroup.Button}
-              title={supportedLanguages[this.state.preferedLanguage] || "Any Language"}
-              onSelect={this.handlePreferedLanguageChange.bind(this)}
-
-            >
-              <MenuItem key='any' eventKey={undefined}>Any Language</MenuItem>
-              {
-                Object.keys(supportedLanguages).map((lang) =>
-                  <MenuItem key={lang} eventKey={lang}>{supportedLanguages[lang]}</MenuItem>
-                )
+              title={
+                supportedLanguages[this.state.preferedLanguage] ||
+                'Any Language'
               }
+              onSelect={this.handlePreferedLanguageChange.bind(this)}
+            >
+              <MenuItem key="any" eventKey={undefined}>
+                Any Language
+              </MenuItem>
+              {Object.keys(supportedLanguages).map(lang => (
+                <MenuItem key={lang} eventKey={lang}>
+                  {supportedLanguages[lang]}
+                </MenuItem>
+              ))}
             </DropdownButton>
             <FormControl
               type="text"
@@ -71,10 +80,13 @@ class VideoSearchForm extends Component {
             />
           </InputGroup>
         </FormGroup>
-        <br/>
-        <VideoQuery videoQuery={this.state.videoQueryDelayed} preferedLanguage={this.state.preferedLanguage}/>
+        <br />
+        <VideoQuery
+          videoQuery={this.state.videoQueryDelayed}
+          preferedLanguage={this.state.preferedLanguage}
+        />
       </div>
-    );
+    )
   }
 }
 

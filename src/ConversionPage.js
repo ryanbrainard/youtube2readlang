@@ -1,6 +1,6 @@
-import React, {Component} from 'react';
-import './App.css';
-import {Col, Jumbotron, Row} from 'react-bootstrap'
+import React, { Component } from 'react'
+import './App.css'
+import { Col, Jumbotron, Row } from 'react-bootstrap'
 import VideoSearchForm from './VideoSearchForm'
 import logoImage from './logo-64.png'
 import ReadlangSessionContainer from './ReadlangSessionContainer'
@@ -13,21 +13,21 @@ class ConversionPage extends Component {
           <Col xs={11} md={10}>
             &nbsp;
             <Jumbotron>
-              <img src={logoImage} alt={"logo"}/>
+              <img src={logoImage} alt={'logo'} />
               <h2>YouTube ➜ Readlang</h2>
               <p>
-                Search for a video and import into Readlang with synchronized subtitles.
+                Search for a video and import into Readlang with synchronized
+                subtitles.
               </p>
             </Jumbotron>
-
             <ReadlangSessionContainer>
-              <VideoSearchForm/>
+              <VideoSearchForm />
             </ReadlangSessionContainer>
           </Col>
         </Row>
       </div>
-    );
+    )
   }
 }
 
-export default ConversionPage;
+export default ConversionPage

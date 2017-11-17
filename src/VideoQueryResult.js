@@ -1,10 +1,10 @@
-import React, {Component} from 'react'
+import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import {Form, FormControl, FormGroup, Media, Well} from 'react-bootstrap'
-import {connect} from 'react-refetch'
+import { Form, FormControl, FormGroup, Media, Well } from 'react-bootstrap'
+import { connect } from 'react-refetch'
 import youtube from './youtube'
 import PromiseStateContainer from './PromiseStateContainer'
-import {supportedLanguages} from './languages'
+import { supportedLanguages } from './languages'
 import ConversionSubmitButton from './ConversionSubmitButton'
 import ErrorBox from './ErrorBox'
 
@@ -22,11 +22,13 @@ class VideoQueryResult extends Component {
   render() {
     const { video, captionsFetch } = this.props
 
-    return <PromiseStateContainer
-      ps={captionsFetch}
-      onPending={() => null}
-      onFulfillment={(captions) => this.renderFulfilled(video, captions.items)}
-    />
+    return (
+      <PromiseStateContainer
+        ps={captionsFetch}
+        onPending={() => null}
+        onFulfillment={captions => this.renderFulfilled(video, captions.items)}
+      />
+    )
   }
 
   componentWillReceiveProps(nextProps) {
@@ -41,21 +43,23 @@ class VideoQueryResult extends Component {
     let selectedCaptionId
 
     if (preferedLanguage) {
-      const preferedCaption = supportedCaptions.find((c) => c.snippet.language === preferedLanguage)
+      const preferedCaption = supportedCaptions.find(
+        c => c.snippet.language === preferedLanguage
+      )
       selectedCaptionId = preferedCaption && preferedCaption.id
     } else {
       selectedCaptionId = supportedCaptions[0] && supportedCaptions[0].id
     }
 
     this.setState({
-      selectedCaptionId
+      selectedCaptionId,
     })
   }
 
   filterSupportedCaptions(captions) {
     return captions
-      .filter((caption) => caption.snippet.trackKind !== "ASR")
-      .filter((caption) => supportedLanguages[caption.snippet.language])
+      .filter(caption => caption.snippet.trackKind !== 'ASR')
+      .filter(caption => supportedLanguages[caption.snippet.language])
   }
 
   renderFulfilled(video, captions) {
@@ -63,18 +67,22 @@ class VideoQueryResult extends Component {
       return null
     }
 
-    const videoId = (typeof video.id === 'object' && video.id.videoId) || video.id
+    const videoId =
+      (typeof video.id === 'object' && video.id.videoId) || video.id
     const snippet = video.snippet
     const { selectedCaptionId } = this.state
-    const handleCaptionChange = (e) => {
+    const handleCaptionChange = e => {
       this.setState({
         selectedCaptionId: e.target.value,
       })
     }
     const thumbnail = snippet.thumbnails.default
-    const selectedCaption = captions.find((c) => c.id === this.state.selectedCaptionId) || captions[0]
+    const selectedCaption =
+      captions.find(c => c.id === this.state.selectedCaptionId) || captions[0]
     const selectedLanguage = selectedCaption && selectedCaption.snippet.language
-    const noCaptionsError = <ErrorBox error="This video does not have any subtitles."/>
+    const noCaptionsError = (
+      <ErrorBox error="This video does not have any subtitles." />
+    )
     const supportedCaptions = this.filterSupportedCaptions(captions)
     const captionsForm = (
       <Form>
@@ -82,20 +90,18 @@ class VideoQueryResult extends Component {
           <FormControl
             componentClass="select"
             value={selectedCaptionId}
-            style={{width: `${thumbnail.width}px`}}
+            style={{ width: `${thumbnail.width}px` }}
             onChange={handleCaptionChange}
           >
-            {
-              supportedCaptions.map((caption) => {
-                return (
-                  <option key={caption.id} value={caption.id}>
-                    {supportedLanguages[caption.snippet.language]}
-                  </option>
-                )
-              })
-            }
+            {supportedCaptions.map(caption => {
+              return (
+                <option key={caption.id} value={caption.id}>
+                  {supportedLanguages[caption.snippet.language]}
+                </option>
+              )
+            })}
           </FormControl>
-          <p/>
+          <p />
           <ConversionSubmitButton
             videoId={videoId}
             title={snippet.title}
@@ -110,14 +116,24 @@ class VideoQueryResult extends Component {
       <Well>
         <Media>
           <Media.Left align="top">
-            <a href={`https://www.youtube.com/watch?v=${videoId}`} target={'_blank'}>
-              <img src={thumbnail.url} width={thumbnail.width} height={thumbnail.height} alt={snippet.title}/>
+            <a
+              href={`https://www.youtube.com/watch?v=${videoId}`}
+              target={'_blank'}
+            >
+              <img
+                src={thumbnail.url}
+                width={thumbnail.width}
+                height={thumbnail.height}
+                alt={snippet.title}
+              />
             </a>
-            <p/>
-            { supportedCaptions.length === 0 ? noCaptionsError : captionsForm }
+            <p />
+            {supportedCaptions.length === 0 ? noCaptionsError : captionsForm}
           </Media.Left>
           <Media.Body>
-            <Media.Heading>{snippet.channelTitle}: {snippet.title}</Media.Heading>
+            <Media.Heading>
+              {snippet.channelTitle}: {snippet.title}
+            </Media.Heading>
             <p>{snippet.description}</p>
           </Media.Body>
         </Media>
@@ -129,6 +145,6 @@ class VideoQueryResult extends Component {
 export default connect(({ video }) => ({
   captionsFetch: youtube.buildApiV3Request('GET', '/captions', {
     videoId: (typeof video.id === 'object' && video.id.videoId) || video.id,
-    part: 'snippet'
+    part: 'snippet',
   }),
 }))(VideoQueryResult)

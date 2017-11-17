@@ -4,18 +4,36 @@
   "private": true,
   "dependencies": {
     "bootstrap": "^3.3.7",
+    "husky": "^0.14.3",
+    "lint-staged": "^5.0.0",
+    "prettier": "^1.8.2",
     "prop-types": "^15.6.0",
     "query-string": "^5.0.1",
     "react": "^16.0.0",
     "react-bootstrap": "^0.31.3",
     "react-dom": "^16.0.0",
     "react-refetch": "^1.0.3-0",
+    "react-router-dom": "^4.2.2",
     "react-scripts": "1.0.17",
     "tsv": "^0.2.0",
     "whatwg-fetch": "^2.0.3",
     "xml2js": "^0.4.19"
   },
+  "prettier": {
+    "semi": false,
+    "singleQuote": true,
+    "trailingComma": "es5"
+  },
+  "lint-staged": {
+    "src/**/*.{js,jsx}": [
+      "prettier --write",
+      "git add"
+    ]
+  },
   "scripts": {
+    "prettier-list": "prettier --list-different 'src/**/*.{js,jsx}'",
+    "prettier-write": "prettier --write 'src/**/*.{js,jsx}'",
+    "precommit": "lint-staged",
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test --env=jsdom",
