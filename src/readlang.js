@@ -78,6 +78,7 @@ readlang.login = function(force) {
 
 readlang.logout = function() {
   localStorage.removeItem(tokenKey)
+  window.location.href = '/'
 }
 
 // TODO: pass in config for these
