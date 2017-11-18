@@ -9,6 +9,7 @@ import {
 } from 'react-bootstrap'
 import VideoQuery from './VideoQuery'
 import { supportedLanguages } from './languages'
+import * as qs from 'query-string'
 
 class VideoSearchForm extends Component {
   constructor(props, context) {
@@ -35,19 +36,25 @@ class VideoSearchForm extends Component {
     })
 
     this.delay()(() => {
-      this.setState({
-        videoQueryDelayed: videoQuery,
+      const search = qs.parse(this.props.location.search)
+      this.props.history.push({
+        search: qs.stringify(
+          Object.assign(search, { videoQueryDelayed: videoQuery })
+        ),
       })
     }, 500)
   }
 
   handlePreferedLanguageChange(lang) {
-    this.setState({
-      preferedLanguage: lang,
+    const search = qs.parse(this.props.location.search)
+    this.props.history.push({
+      search: qs.stringify(Object.assign(search, { preferedLanguage: lang })),
     })
   }
 
   render() {
+    const search = qs.parse(this.props.location.search)
+    const { videoQueryDelayed, preferedLanguage } = search
     const { videoQuery } = this.state
 
     return (
@@ -82,8 +89,8 @@ class VideoSearchForm extends Component {
         </FormGroup>
         <br />
         <VideoQuery
-          videoQuery={this.state.videoQueryDelayed}
-          preferedLanguage={this.state.preferedLanguage}
+          videoQuery={videoQueryDelayed || ''}
+          preferedLanguage={preferedLanguage || ''}
         />
       </div>
     )
