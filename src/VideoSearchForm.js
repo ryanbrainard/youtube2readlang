@@ -10,13 +10,15 @@ import {
 import VideoQuery from './VideoQuery'
 import { supportedLanguages } from './languages'
 import * as qs from 'query-string'
+import { withRouter } from 'react-router-dom'
 
 class VideoSearchForm extends Component {
   constructor(props, context) {
     super(props, context)
+    const search = qs.parse(this.props.location.search)
     this.state = {
-      videoQuery: '',
-      videoQueryDelayed: '',
+      videoQuery: search.videoQuery,
+      videoQueryDelayed: search.videoQuery,
     }
   }
 
@@ -97,4 +99,4 @@ class VideoSearchForm extends Component {
   }
 }
 
-export default VideoSearchForm
+export default withRouter(VideoSearchForm)

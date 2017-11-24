@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import { connect } from 'react-refetch'
+import { connect, PromiseState } from 'react-refetch'
 import youtube from './youtube'
 import VideoQueryResult from './VideoQueryResult'
 import PromiseStateContainer from './PromiseStateContainer'
@@ -53,6 +53,10 @@ export default connect(({ videoQuery }) => {
       }),
     }
   } else {
-    return {}
+    return {
+      videosFetch: {
+        value: PromiseState.resolve({ items: [] }),
+      },
+    }
   }
 })(VideoQuery)

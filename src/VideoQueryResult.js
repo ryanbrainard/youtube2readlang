@@ -5,7 +5,7 @@ import { connect } from 'react-refetch'
 import youtube from './youtube'
 import PromiseStateContainer from './PromiseStateContainer'
 import { supportedLanguages } from './languages'
-import ConversionSubmitButton from './ConversionSubmitButton'
+import VideoConversionSubmitButton from './VideoConversionSubmitButton'
 import ErrorBox from './ErrorBox'
 
 class VideoQueryResult extends Component {
@@ -102,7 +102,7 @@ class VideoQueryResult extends Component {
             })}
           </FormControl>
           <p />
-          <ConversionSubmitButton
+          <VideoConversionSubmitButton
             videoId={videoId}
             title={snippet.title}
             author={snippet.channelTitle}
