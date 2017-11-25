@@ -17,8 +17,7 @@ class VideoSearchForm extends Component {
     super(props, context)
     const search = qs.parse(this.props.location.search)
     this.state = {
-      videoQuery: search.videoQuery,
-      videoQueryDelayed: search.videoQuery,
+      videoQuery: search.q,
     }
   }
 
@@ -40,9 +39,7 @@ class VideoSearchForm extends Component {
     this.delay()(() => {
       const search = qs.parse(this.props.location.search)
       this.props.history.push({
-        search: qs.stringify(
-          Object.assign(search, { videoQueryDelayed: videoQuery })
-        ),
+        search: qs.stringify(Object.assign(search, { q: videoQuery })),
       })
     }, 500)
   }
@@ -56,7 +53,7 @@ class VideoSearchForm extends Component {
 
   render() {
     const search = qs.parse(this.props.location.search)
-    const { videoQueryDelayed, preferedLanguage } = search
+    const { q, preferedLanguage } = search
     const { videoQuery } = this.state
 
     return (
@@ -91,7 +88,7 @@ class VideoSearchForm extends Component {
         </FormGroup>
         <br />
         <VideoQuery
-          videoQuery={videoQueryDelayed || ''}
+          videoQuery={q || ''}
           preferedLanguage={preferedLanguage || ''}
         />
       </div>
