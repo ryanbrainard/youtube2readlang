@@ -5,9 +5,9 @@ import { PromiseState } from 'react-refetch'
 import PropTypes from 'prop-types'
 import readlang from './readlang'
 import PromiseStateContainer from './PromiseStateContainer'
-import VideoSearchForm from './VideoSearchForm'
+import VideoSearchForm from './VideoQueryForm'
 
-class VideoSearchPage extends Component {
+export default class VideoQueryPage extends Component {
   static contextTypes = {
     readlangUserFetch: PropTypes.instanceOf(PromiseState),
   }
@@ -24,7 +24,11 @@ class VideoSearchPage extends Component {
             <p>
               <strong>To get started, log into your Readlang account.</strong>{' '}
               If you're not familiar with{' '}
-              <a href="http://readlang.com" target="_blank">
+              <a
+                href="http://readlang.com"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
                 Readlang
               </a>, it is a nifty little service that let's you read anything in
               a foreign language with built-in translations, dictionary, and
@@ -43,5 +47,3 @@ class VideoSearchPage extends Component {
     )
   }
 }
-
-export default VideoSearchPage

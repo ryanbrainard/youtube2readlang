@@ -7,8 +7,8 @@ import PromiseStateContainer from './PromiseStateContainer'
 
 class VideoQuery extends Component {
   static propTypes = {
-    videoQuery: PropTypes.string.isRequired,
-    preferedLanguage: PropTypes.string,
+    q: PropTypes.string.isRequired,
+    lang: PropTypes.string,
   }
 
   render() {
@@ -20,7 +20,7 @@ class VideoQuery extends Component {
             <VideoQueryResult
               key={video.etag}
               video={video}
-              preferedLanguage={this.props.preferedLanguage}
+              lang={this.props.lang}
             />
           ))
         }
@@ -31,8 +31,8 @@ class VideoQuery extends Component {
 
 const YOUTUBE_REGEX = /^((?:https?:)?\/\/)?((?:www|m)\.)?((?:youtube\.com|youtu.be))(\/(?:[\w-]+\?v=|embed\/|v\/)?)([\w-]+)(\S+)?$/
 
-export default connect(({ videoQuery }) => {
-  const urlMatches = videoQuery.match(YOUTUBE_REGEX)
+export default connect(({ q }) => {
+  const urlMatches = q.match(YOUTUBE_REGEX)
   const videoId = urlMatches && urlMatches[5]
 
   if (videoId) {
@@ -42,14 +42,14 @@ export default connect(({ videoQuery }) => {
         part: 'snippet',
       }),
     }
-  } else if (videoQuery.length > 0) {
+  } else if (q.length > 0) {
     return {
       videosFetch: youtube.buildApiV3Request('GET', '/search', {
         type: 'video',
         part: 'snippet',
         videoCaption: 'closedCaption',
         maxResults: 20,
-        q: videoQuery,
+        q: q,
       }),
     }
   } else {

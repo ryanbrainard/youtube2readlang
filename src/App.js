@@ -6,7 +6,7 @@ import logoImage from './logo-64.png'
 import ReadlangSessionContainer from './ReadlangSessionContainer'
 import Header from './Header'
 import SocialIcons from './SocialIcons'
-import VideoSearchPage from './VideoSearchPage'
+import VideoSearchPage from './VideoQueryPage'
 
 class App extends Component {
   render() {

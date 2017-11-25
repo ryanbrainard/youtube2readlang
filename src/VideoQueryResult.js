@@ -11,7 +11,7 @@ import ErrorBox from './ErrorBox'
 class VideoQueryResult extends Component {
   static propTypes = {
     video: PropTypes.object.isRequired,
-    preferedLanguage: PropTypes.string,
+    lang: PropTypes.string,
   }
 
   constructor(props, context) {
@@ -32,7 +32,7 @@ class VideoQueryResult extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    const preferedLanguage = nextProps.preferedLanguage
+    const lang = nextProps.lang
 
     if (!nextProps.captionsFetch.fulfilled) {
       return
@@ -42,9 +42,9 @@ class VideoQueryResult extends Component {
     const supportedCaptions = this.filterSupportedCaptions(captions)
     let selectedCaptionId
 
-    if (preferedLanguage) {
+    if (lang) {
       const preferedCaption = supportedCaptions.find(
-        c => c.snippet.language === preferedLanguage
+        c => c.snippet.language === lang
       )
       selectedCaptionId = preferedCaption && preferedCaption.id
     } else {
@@ -63,7 +63,7 @@ class VideoQueryResult extends Component {
   }
 
   renderFulfilled(video, captions) {
-    if (this.props.preferedLanguage && !this.state.selectedCaptionId) {
+    if (this.props.lang && !this.state.selectedCaptionId) {
       return null
     }
 
